@@ -1,41 +1,40 @@
-#密码
-导入请求
-进口CSV
-导入时间
-从日期时间导入日期时间
+import requests
+import csv
+import time
+from datetime import datetime
 
-类：
-定义文件__初始化__（自我，市场名称，间隔=5​）
-市场名称=市场名称
-自间隔=间隔
+class UpbitOrderBookCollector:
+    def __init__(self, market_name, interval=5):
+        self.market_name = market_name
+        self.interval = interval
 
-定义取序簿（自身）：
-comurl = f“https://api。厄比特./v1/订单簿？市场=自我市场名称”
-    响应=请求。get（网址）
-​
-    退货订单_预订_数据
+    def fetch_order_book(self):
+        url = f"https://api.upbit.com/v1/orderbook?markets={self.market_name}"
+        response = requests.get(url)
+        order_book_data = response.json()[0]
+        return order_book_data
 
-    自身，订单书数据，文件名：
-    打开（文件名，‘w’，换行符=“）作为csvfile：
-    字段名=【价格、数量、类型、时间戳】
-    writer=csvDictWriter（csvfile，字段名=字段名）
+    def save_order_book(self, order_book_data, filename):
+        with open(filename, 'w', newline='') as csvfile:
+            fieldnames = ['price', 'quantity', 'type', 'timestamp']
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             
-    写头文件（）
-    以order_book_data【“订单簿单元""订单簿单元"】形式投标者：】形式投标者：
-    价格：出价，数量：出价，类型：出价，时间戳：时间（））
-​​​】中的查询:​
-    价格：要价，数量：要价，类型：要价，时间戳：时间。时间​
+            writer.writeheader()
+            for bid in order_book_data['orderbook_units']:
+                writer.writerow({'price': bid['ask_price'], 'quantity': bid['ask_size'], 'type': 'bid', 'timestamp': time.time()})
+            for ask in order_book_data['orderbook_units']:
+                writer.writerow({'price': ask['bid_price'], 'quantity': ask['bid_size'], 'type': 'ask', 'timestamp': time.time()})
 
-    def运行（自身）：
-    而真实：
-    order_book_data=自取order_book
-    文件名=f“书日期时间。现在.strftimestrftimestrftimestrftimestrftimestrftimestrftimestrftimestrftimestrftimestrftimestrftimestrftimestrftimest​​​​​​​​rftimestrftimestrftimestrftimestrftimestrf timestrftime strftimestrftimestrftimestrftimestrftimestrftim ftimestrf timestrftimestrftimestrftimestrftimestrftimestrftimestrftimes t rftimestrftimestrfimestrftimestrftimestrftimestrftimestrftimestrftime strftimestimestrftimestrftimestrftimestrftimestrftimestrftime strftimest。rftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftimestrftime（strftime（strftime（strftime（strftime（strftime）e（strftime（strftime（strftime（strftime（strftime（strftime（strftimestrftime（strftime）（strftime（strf时间（strftime（strftimestrftime（strftime（strftime（strftime（strftime）（strftime（strftime（strftime（圣rftime（strftime（strftimestrftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime）trftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime）（strftime（strftime）（strftime（strftime）rftime（strftime）ftime（strftime）ftime（strftime）strftime（strftime）strf time（strftime（strftime）trftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strft）ime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime）trftime（strfti me（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strf时间（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime）e（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（str​​​​​ftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftimestrftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftimestrftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftimestrftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftimestrftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftimestrftime（strftime（strftime（strftime（strftimestrftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftimestrftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftimestrftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftimestrftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（'%Y-%m-%d'）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}​​​​)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{​-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-up​t-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-up​t-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upbit-{)}-upb​​​-upbit-{)}-up​t-{)}-upbit-{)}-upbit-{)}-upbit-{)}​​​​​​-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{{ ）}-upbit-{ ）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）位-{）}-upbit-{{）}-upbit-{ ）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upupbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）} -upbit-{）}-}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）位-{{）}-upbit-{ ）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{） }-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{strftime（strftime（strftime（str）rftime（strftime）strftime（strftime（strft名称（strftimefftime）me（strftime）strf time（strftime（strftim e（strftime time（strftime）}-upbitstrftimestrf时间（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime）（strftime（strf时间（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime（strftime）}-upbit-{自我市场名称“）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit --{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit it-{自我市场名称“）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit -{）}-upbit-{）}-}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-up位-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{）}-upbit-{strftimestrftimestrftimestrftimestrftimestrftimestrftimestrftimest时间表t-{}-upbit-{}-upbit bit-{}-upbit-{}-upbit-{}-u pbit-{}-upbit-{}-upbit-{}-upbit-{}-upbit-{}-upbit-{}-upbit-{​​​-{}-upbit-{}-upbit-{}-upbit-{}-upbit-{}-upbit-{}-upbit-{}-upbit-{}-upbit-{}-upbit-{}-upbit-{}-upbit-{}-upbit-{}-upbit-{}-upbit-{}-upbit-{}-upbit-{}-upbit-{}-upbit-{}-upbit-{}-upbit-{}-up​timestrftimestrftimestrftimestrftimestrftimestrftimestrftimestrftim estrftimestrftimestrftimestrftimestrftimestrftimestrftimestrftimestrftimestrftimestrftimestrftimestrftimestrftimestrftimestrftimestrftimestrftimestrftime}-upbit-{自我市场名称“}-上，上，下，上​​
-    save_order_book（order_book_data，文件名）
-    打印“订单簿数据保存到{​文件名}​”）
-    睡眠时间（自我间隔）
+    def run(self):
+        while True:
+            order_book_data = self.fetch_order_book()
+            filename = f"book-{datetime.now().strftime('%Y-%m-%d')}-upbit-{self.market_name}.csv"
+            self.save_order_book(order_book_data, filename)
+            print(f"Order book data saved to {filename}")
+            time.sleep(self.interval)
 
-#用法示例：
-如果__姓名__ == “主要":
-收集器=UpbitOrderBookCollector（市场名称=KRW-BTC，间隔=）
-收集器.运行
+# Usage example:
+if __name__ == "__main__":
+    collector = UpbitOrderBookCollector(market_name='KRW-BTC', interval=5)
+    collector.run()
 
