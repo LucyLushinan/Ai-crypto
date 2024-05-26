@@ -1,0 +1,22 @@
+导入熊猫作为PD
+
+#读取交易数据和订单簿数据
+trade_data = pd.​​读取_csv（（“2024年05月01日上调BTC交易价”））​
+book_data = pd.读一读_csv（“2024年05月01日更新版BTC-book.csv”））
+
+#
+​"中间价格"图书数据=（book_data“价格”+book_data的2
+
+#计算订单簿失衡
+ask_volume=book_data.洛克=1，数量总和
+bid_volume=book_data.洛克=0，数量总和
+账面数据=（询价量-投标量）/（询价量+投标量）
+
+#选择并重命名所需的列
+特征=book_data【时间戳、中间价格、、、、书籍不平衡】
+
+#将结果保存到CSV文件
+output_file_path=上一位的btc-feature.csv
+输出_文件_路径，索引=False
+
+打印（打印（"功能文件已保存到:"，输出文件路径，输出文件路径
